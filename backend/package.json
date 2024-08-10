@@ -1,0 +1,19 @@
+{
+  "name": "pokedex-backend",
+  "version": "0.1.0",
+  "description": "Backend do projeto de Pokédex",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "nodemon index.js"
+  },
+  "author": "Jonatan e André",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.19.2",
+    "mongodb": "^6.8.0",
+    "nodemon": "^3.1.4",
+    "pokedex-promise-v2": "^4.2.0"
+  }
+}
