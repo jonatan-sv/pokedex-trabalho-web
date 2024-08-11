@@ -1,5 +1,7 @@
 # TODO do projeto
 
+# Primeiro trabalho
+
 - [X] Fazer a base do projeto
-- [ ] Adicionar as outras rotas
-- [ ] Adicionar a parte do MongoDB
+- [X] Adicionar as outras rotas
+- [X] Adicionar a parte do MongoDB
