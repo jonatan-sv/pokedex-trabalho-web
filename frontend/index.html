@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Página inicial</title>
+    <style>
+        #container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-direction: row;
+            flex-wrap: wrap;
+            gap: 10px; /* Espaço entre os itens */
+        }
+
+        #container div {
+            text-align: center;
+        }
+
+        #container img {
+            width: 100px; /* Define um tamanho para as imagens */
+            height: 100px;
+        }
+
+        #container span {
+            display: block;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Pokedex</h1>
+    <section id="container"></section>
+    <script>
+        const url = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/";
+        const container = document.querySelector("#container");
+
+        fetch('http://localhost:8800/pokemons').then(response =>{
+            if(!response.ok){
+                throw new Error('Não foi possível conectar ao servidor');
+            }
+            return response.json();
+        }).then(data => {
+                const pokemons = data.results;
+
+                if (Array.isArray(pokemons)) {
+                    var aux = 10001
+                    pokemons.forEach((pokemon, index) => {
+                        const div = document.createElement("div");
+                        const img = document.createElement("img");
+                        img.src = `${url}${index + 1 <= 1025 ? index + 1 : aux++}.png`;
+                        div.appendChild(img);
+                        const name = document.createElement("span");
+                        name.textContent = `${pokemon.nome || pokemon.name}`;
+                        const num = document.createElement("span");
+                        num.textContent = `#${index + 1 <= 1025 ? index + 1 : aux - 1}`;
+                        div.appendChild(name);
+                        div.appendChild(num);
+
+                        container.appendChild(div);
+                    });
+                } else {
+                    console.error("Os resultados não são um array:", pokemons);
+                }
+            })
+            .catch(error => {
+                console.error("Erro na requisição:", error);
+            });
+    </script>
+</body>
+</html>
