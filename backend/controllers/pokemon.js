@@ -2,7 +2,7 @@ import Pokemon from "../models/pokemon.js";
 
 /**
  * TODO:
- * - Melhorar as respostas de erro
+ * - Melhorar as respostas de erro e gerais
  */
 
 export const getPokemons = (_, res) => {
@@ -22,12 +22,13 @@ export const getPokemons = (_, res) => {
 
 export const getPokemonByID = (req, res) => {
   Pokemon.findOne({ number: req.params.id })
-    .then((res2) => res.status(404).json(res2))
+    .select("-_id -__v")
+    .then((data) => res.status(200).json(data))
     .catch((error) => {
-      console.error("Erro ao atualizar o Pokémon:", error);
+      console.error("Erro ao procurar Pokémon:", error);
       return res
         .status(500)
-        .json({ message: "Erro ao atualizar o Pokémon", error: error.message });
+        .json({ message: "Erro ao procurar Pokémon:", error: error.message });
     });
 };
 
