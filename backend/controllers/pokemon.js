@@ -2,7 +2,8 @@ import Pokemon from "../models/pokemon.js";
 
 /**
  * TODO:
- * - Melhorar as respostas de erro e gerais
+ * - Terminar de melhorar as respostas de erro e gerais
+ * - Adicionar sistema de logging de arquivos para erros do DB (winston)
  */
 
 export const getPokemons = (_, res) => {
@@ -12,10 +13,8 @@ export const getPokemons = (_, res) => {
       return res.status(200).json({ results: pokemons });
     })
     .catch((error) => {
-      console.error("Erro ao obter os Pokémon:", error);
       return res.status(500).json({
-        message: "Erro ao obter os Pokémon",
-        error: error.message,
+        message: "Erro interno ao obter os Pokémons"
       });
     });
 };
@@ -23,12 +22,17 @@ export const getPokemons = (_, res) => {
 export const getPokemonByID = (req, res) => {
   Pokemon.findOne({ number: req.params.id })
     .select("-_id -__v")
-    .then((data) => res.status(200).json(data))
+    .then((data) => {
+      if (!data) {
+        return res.status(404).json({ message: "Pokémon não encontrado!" });
+      }
+      return res.status(200).json(data);
+    })
     .catch((error) => {
       console.error("Erro ao procurar Pokémon:", error);
       return res
         .status(500)
-        .json({ message: "Erro ao procurar Pokémon:", error: error.message });
+        .json({ message: "Erro interno ao procurar Pokémon"});
     });
 };
 
@@ -38,7 +42,11 @@ export const updatePokemonByID = (req, res) => {
     type: req.query.type,
     sprite: req.query.sprite,
   };
-  Pokemon.findOneAndUpdate({ number: req.query.number }, updates)
+  Pokemon.findOneAndUpdate({ number: Number(req.params.id) }, updates, {
+    new: true,    // Retorna o pokémon atualizado ao invés do antigo
+    upsert: true, // Cria o pokémon se ele não for encontrado
+  })
+    .select("-_id -__v")
     .then((updatedPokemon) => {
       if (!updatedPokemon) {
         return res.status(404).json({ message: "Pokémon não encontrado" });
@@ -46,10 +54,9 @@ export const updatePokemonByID = (req, res) => {
       return res.json(updatedPokemon);
     })
     .catch((error) => {
-      console.error("Erro ao atualizar o Pokémon:", error);
       return res
         .status(500)
-        .json({ message: "Erro ao atualizar o Pokémon", error: error.message });
+        .json({ message: "Erro interno ao atualizar o Pokémon"});
     });
 };
 
@@ -61,7 +68,9 @@ export const deletePokemonByID = (req, res) => {
       }
     })
     .catch((error) => {
-      return res.json(error);
+      return res
+      .status(500)
+      .json({ message: "Erro interno ao atualizar o Pokémon"});
     });
 };
 
@@ -77,19 +86,16 @@ export const postPokemon = (req, res) => {
     .save()
     .then((poke) => res.status(201).json(poke))
     .catch((error) => {
-      console.error("Erro ao salvar o pokémon:", error);
       if (error.name === "ValidationError") {
         return res
           .status(400)
           .json({ error: "Alguma das propriedades está no tipo errado!" });
       } else if (error.code === 11000) {
-        return res
-          .status(409)
-          .json({ error: "Já existe este pokémon já existe!" });
+        return res.status(409).json({ error: "Este pokémon já existe!" });
       } else {
         return res
           .status(500)
-          .json({ error: "Ocorreu algum erro no servido!" });
+          .json({ error: "Erro interno ao adicionar Pokémon!" });
       }
     });
 };

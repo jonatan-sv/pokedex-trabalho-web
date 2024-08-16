@@ -7,7 +7,7 @@ const router = express.Router();
 router.get("/", getPokemons);
 router.get("/:id", getPokemonByID);
 router.post("/", postPokemon);
-router.put("/", updatePokemonByID);
+router.put("/:id", updatePokemonByID);
 router.delete("/:id", deletePokemonByID);
 
 export default router;
