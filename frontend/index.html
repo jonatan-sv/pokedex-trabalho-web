@@ -3,95 +3,80 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Página inicial</title>
+    <link
+      rel="icon"
+      type="image/x-icon"
+      href="https://upload.wikimedia.org/wikipedia/commons/5/53/Pok%C3%A9_Ball_icon.svg"
+    />
+    <title>Página principal</title>
+  </head>
+  <body>
     <style>
-      #container {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        flex-direction: row;
-        flex-wrap: wrap;
-        gap: 10px;
-      }
-
-      #container div {
-        text-align: center;
-      }
-
-      #container img {
-        width: 100px;
-        height: 100px;
-      }
-
-      #container span {
-        display: block;
-        margin-top: 5px;
+      html {
+        background-image: url("./background.jpg");
+        background-repeat: no-repeat;
+        background-size: cover;
       }
 
       #nextPageButton {
-            margin-top: 20px;
-            padding: 10px 20px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-        }
+        padding: 10px 20px;
+        background-color: #4caf50;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+      }
 
-        #nextPageButton:hover {
-            background-color: #45a049;
-        }
+      #nextPageButton:hover {
+        background-color: #45a049;
+      }
+
+      #links {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 8px;
+
+        padding: 1rem 1.25rem;
+        background: rgba(61, 61, 61, 0.3);
+        backdrop-filter: blur(5px);
+        border: none;
+        border-radius: 5px;
+        margin-bottom: 3rem;
+        z-index: 2;
+      }
+
+      #wrap {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        filter: drop-shadow(0 10px 4px rgba(0, 0, 0, 0.46));
+      }
+
+      #logo {
+        filter: drop-shadow(0 10px 4px rgba(0, 0, 0, 0.46));
+      }
     </style>
-  </head>
-  <body>
-    <h1>Pokédex</h1>
-    <a href="./id_test">
-      <button id="nextPageButton">Busca por ID</button>
-    </a>
-    <section id="container"></section>
-
-    <script>
-      const container = document.querySelector("#container");
-      const server = "http://localhost:8800/pokemons";
-
-      fetch(server)
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error("Não foi possível se conectar ao servidor!");
-          }
-          return response.json();
-        })
-        .then((data) => {
-          const pokemons = data.results;
-          if (Array.isArray(pokemons)) {
-            if (pokemons.length === 0){
-              throw new Error("O banco de dados está vazio!");
-            }
-            pokemons.forEach((pokemon, index) => {
-              const div = document.createElement("div");
-              // Criar imagem
-              const img = document.createElement("img");
-              img.src = pokemon.sprite;
-              div.appendChild(img);
-              // Criar nome e número
-              const name = document.createElement("span");
-              name.textContent = `${pokemon.name ?? "Desconhecido"}`;
-              name.style.fontWeight = "bold";
-              const num = document.createElement("span");
-              num.textContent = `#${pokemon.number}`;
-              div.appendChild(name);
-              div.appendChild(num);
-              // Adicionar
-              container.appendChild(div);
-          });
-          } else {
-            console.error("Os resultados não são um array:", pokemons);
-          }
-        })
-        .catch((error) => {
-          console.error("Erro na requisição:", error);
-        });
-    </script>
+    <p align="center">
+      <img
+        id="logo"
+        src="https://upload.wikimedia.org/wikipedia/commons/9/98/International_Pok%C3%A9mon_logo.svg"
+        width="900px"
+        height="200px"
+      />
+    </p>
+    <div id="wrap">
+      <div id="links">
+        <a href="./all_test">
+          <button id="nextPageButton">Ver todos os Pokémons</button>
+        </a>
+        <a href="./id_test">
+          <button id="nextPageButton">Procurar Pokémon por ID</button>
+        </a>
+      </div>
+    </div>
   </body>
 </html>
