@@ -27,11 +27,29 @@
         display: block;
         margin-top: 5px;
       }
+
+
+      #nextPageButton {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        #nextPageButton:hover {
+            background-color: #45a049;
+        }
     </style>
   </head>
   <body>
     <h1>Pokédex</h1>
+    <button id="nextPageButton" onclick="goNextPage()">Busca por ID</button>
     <section id="container"></section>
+
     <script>
       const container = document.querySelector("#container");
       const server = "http://localhost:8800/pokemons";
@@ -73,6 +91,12 @@
         .catch((error) => {
           console.error("Erro na requisição:", error);
         });
+
+        function goNextPage() {
+            window.location.href = "file:///C:/Users/andre/OneDrive/%C3%81rea%20de%20Trabalho/Trabalho%20web/pokedex-trabalho-web/frontend/id_test.html";
+        }
+
+
     </script>
   </body>
 </html>
