@@ -28,7 +28,6 @@
         margin-top: 5px;
       }
 
-
       #nextPageButton {
             margin-top: 20px;
             padding: 10px 20px;
@@ -47,7 +46,9 @@
   </head>
   <body>
     <h1>Pokédex</h1>
-    <button id="nextPageButton" onclick="goNextPage()">Busca por ID</button>
+    <a href="./id_test">
+      <button id="nextPageButton">Busca por ID</button>
+    </a>
     <section id="container"></section>
 
     <script>
@@ -91,12 +92,6 @@
         .catch((error) => {
           console.error("Erro na requisição:", error);
         });
-
-        function goNextPage() {
-            window.location.href = "file:///C:/Users/andre/OneDrive/%C3%81rea%20de%20Trabalho/Trabalho%20web/pokedex-trabalho-web/frontend/id_test.html";
-        }
-
-
     </script>
   </body>
 </html>
