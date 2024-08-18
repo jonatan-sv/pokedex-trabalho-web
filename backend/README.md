@@ -126,6 +126,7 @@ backend/
   ├── logs/
   ├── models/
   ├── routes/
+  ├── utils/
   ├── db.js
   ├── dump.js
   ├── index.js
@@ -136,6 +137,7 @@ backend/
 - `logs`: Arquivos de log que são criados durante a execução
 - `models`: Modelos de dados
 - `routes`: Rotas que recebem as requisições
+- `utils`: Códigos úteis
 - `db.js`: Configurações do banco de dados
 - `dump.js`: Script para popular o banco de dados com os Pokémons
 - `index.js`: Configurações da API

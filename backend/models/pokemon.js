@@ -15,25 +15,39 @@ const pokeTypes =   [
 const PokemonSchema = new Schema({
   name: {
     type: String,
-    required: true,
+    required: [true, "O nome do Pokémon é obrigatório!"],
     unique: true,
   },
   number: {
     type: Number,
-    required: true,
+    required: [true, "O número do Pokémon é obrigatório!"],
     unique: true,
   },
   type: {
     type: [String],
-    enum: pokeTypes,
-    required: true,
-    unique: false,
+    enum: {
+      values: pokeTypes,
+      message: "O tipo `{VALUE}` não existe!",
+    },
+    required: [true, "O tipo do Pokémon é obrigatório!"],
+    validate: {
+      validator: (v) => v.length > 0,
+      message: "O Pokémon deve ter pelo menos um tipo!",
+    },
   },
   sprite: {
     type: String,
-    required: true,
+    required: [true, "O sprite do Pokémon é obrigatório!"],
     unique: true,
   },
+}, {
+  toJSON: {
+    transform: (_, ret) => {
+      delete ret._id;
+      delete ret.__v;
+      return ret;
+    }
+  }
 });
 
 export default model("pokemons", PokemonSchema);
