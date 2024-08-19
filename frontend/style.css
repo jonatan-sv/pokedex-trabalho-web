@@ -9,13 +9,9 @@
 html {
     background-image: url("./img/tests_bg.png");
     background-repeat: repeat-x;
-    /* Faz a imagem se repetir apenas no eixo x */
     background-position: top;
-    /* Posiciona a imagem no topo da tela */
-    background-size: auto;
-    /* Mantém o tamanho original da imagem */
     background-color: #7fad71;
-    background-size: contain;
+    background-size: auto;
 }
 
 * {
