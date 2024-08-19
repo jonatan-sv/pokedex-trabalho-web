@@ -24,16 +24,10 @@ export const getPokemonByID = (req, res) => {
     });
 };
 
-/**
- * TODO:
- * - Fazer com que também peguem os dados pelo corpo da request
- */
 export const postPokemon = (req, res) => {
   const novoPokemon = new Pokemon({
-    name: req.query.name,
-    number: req.query.number,
-    type: req.query.type,
-    sprite: req.query.sprite,
+    ...req.query,
+    ...req.body,
   });
 
   novoPokemon
@@ -46,9 +40,8 @@ export const postPokemon = (req, res) => {
 
 export const updatePokemonByID = (req, res) => {
   const updates = {
-    name: req.query.name,
-    type: req.query.type,
-    sprite: req.query.sprite,
+    ...req.query,
+    ...req.body,
   };
   Pokemon.findOneAndUpdate({ number: Number(req.params.id) }, updates, {
     new: true,           // Retorna o pokémon atualizado ao invés do antigo

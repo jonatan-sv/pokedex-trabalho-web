@@ -3,16 +3,15 @@
   <img src="https://upload.wikimedia.org/wikipedia/commons/9/98/International_Pok%C3%A9mon_logo.svg" />
   
 </p>
-<p align="center" style="font-size:20px; font-weight:bold">
-  Informações sobre o Backend
+<p align="center">
+  <strong>Informações sobre o Backend</strong>
 </p>
 <br/>
 
 ## 📤 Rotas da API
 
-### **1. Rota: `/pokemons`**
+### **1. `GET` `/pokemons`**
 
-- **Método: GET**
 - **Descrição:** Obtém a lista de todos os Pokémons.
 - **Resposta Sucesso:** `200 OK`
 
@@ -35,12 +34,11 @@
   }
   ```
 
-### **2. Rota: `/pokemons/:id`**
+### **2. `GET` `/pokemons/:id`**
 
-- **Método: GET**
 - **Descrição:** Obtém os detalhes de um Pokémon específico pelo ID.
 - **Parâmetros de URL:**
-  - `id` (string): ID do Pokémon.
+  - `id`: ID do Pokémon.
 - **Resposta Sucesso:** `200 OK`
 
   ```json
@@ -54,11 +52,9 @@
 
 - **Resposta Erro:** `404 Not Found` se o Pokémon não for encontrado.
 
-### **3. Rota: `/pokemons`**
+### **3. `POST` `/pokemons`**
 
-- **Método: POST**
 - **Descrição:** Adiciona um novo Pokémon.
-
 - **Resposta Sucesso:** `201 Created`
 
   ```json
@@ -72,9 +68,8 @@
 
 - **Resposta Erro:** `400 Bad Request` se os dados estiverem incorretos.
 
-### **4. Rota: `/pokemons/:id`**
+### **4. `PUT` `/pokemons/:id`**
 
-- **Método: PUT**
 - **Descrição:** Atualiza os dados de um Pokémon existente. Se não existir, adiciona.
 - **Parâmetros de URL:**
   - `id` (string): ID do Pokémon a ser atualizado.
@@ -92,9 +87,8 @@
 
 - **Resposta Erro:** `404 Not Found` se o Pokémon não for encontrado.
 
-### **5. Rota: `/pokemons/:id`**
+### **5. `DELETE` `/pokemons/:id`**
 
-- **Método: DELETE**
 - **Descrição:** Remove um Pokémon pelo ID.
 - **Parâmetros de URL:**
   - `id` (string): ID do Pokémon a ser removido.
@@ -104,7 +98,7 @@
 > ⚠️ *ATENÇÃO*
 >
 > - O id do Pokémon é chamado de "number" no banco de dados para evitar confusões com o id do documento.
-> - Os campos a serem modificados devem ser enviados como queries. Exemplo: `https://...pokemons/?name=Novo&number=...`
+> - É possível utilizar tanto as queries quanto o corpo da requisição para enviar dados nos métodos PUT e POST.
 
 ## 📦 Pacotes instalados
 
