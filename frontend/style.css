@@ -1,0 +1,112 @@
+@font-face {
+    font-family: "Flexo";
+    src: local("Flexo Demi"), local("Flexo-Demi"),
+        url("Flexo-Demi.ttf") format("truetype");
+    font-weight: normal;
+    font-style: normal;
+}
+
+html {
+    background-image: url("./img/tests_bg.png");
+    background-repeat: repeat-x;
+    /* Faz a imagem se repetir apenas no eixo x */
+    background-position: top;
+    /* Posiciona a imagem no topo da tela */
+    background-size: auto;
+    /* Mantém o tamanho original da imagem */
+    background-color: #7fad71;
+    background-size: contain;
+}
+
+* {
+    font-family: "Flexo";
+}
+
+#container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 10px;
+    filter: drop-shadow(0 5px 4px rgba(0, 0, 0, 0.55));
+}
+
+#container div {
+    text-align: center;
+}
+
+#container img {
+    width: 200px;
+    height: 200px;
+}
+
+#container span {
+    display: block;
+    margin-top: 5px;
+}
+
+#types img {
+    width: 131px !important;
+    height: 49px !important;
+}
+
+#poke {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    border: 2px solid gray;
+    border-radius: 10px;
+    padding: 20px;
+    background-color: white;
+    min-width: 305px;
+    min-height: 430px;
+}
+
+input#number {
+    text-align: center;
+    border-radius: 10px;
+    border: 2px solid gray;
+}
+
+#wra {
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+}
+
+#nextPageButton {
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+#nextPageButton:hover {
+    background-color: #45a049;
+}
+
+#floatBtns {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    flex-direction: row;
+    margin-bottom: 20px;
+}
+
+input#name,
+input#sprite {
+    border: none;
+    border-bottom: 2px solid black;
+}
+
+input#name,
+input#sprite:focus {
+    outline: none !important;
+    color: none !important;
+}

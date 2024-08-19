@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link
+      rel="icon"
+      type="image/x-icon"
+      href="https://upload.wikimedia.org/wikipedia/commons/5/53/Pok%C3%A9_Ball_icon.svg"
+    />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Procurar por ID</title>
+    <link rel="stylesheet" href="style.css">
+  </head>
+  <body>
+    <p align="center" style="filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.655));">
+      <img
+        src="https://upload.wikimedia.org/wikipedia/commons/9/98/International_Pok%C3%A9mon_logo.svg"
+        height="150px"
+      />
+    </p>
+
+    <div id="floatBtns">
+      <a href="./GET_all_test.html">
+        <button id="nextPageButton">← Voltar</button>
+      </a>
+      <a href="./POST_test.html">
+        <button id="nextPageButton">Avançar →</button>
+      </a>
+    </div>
+
+    <div id="wra">
+      <div id="poke">
+        <section id="container">
+          <div>
+            <img
+              id="sprite"
+              src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/0.png"
+            />
+            <span id="name" style="font-weight: bold">???</span>
+            <span id="number">#0</span>
+            <div id="types"></div>
+          </div>
+        </section>
+        <br />
+        <br />
+        <form name="searchByID" method="post">
+          Procurar por ID:
+          <input
+            type="number"
+            name="number"
+            id="number"
+            min="1"
+            max="100000"
+            placeholder="1"
+          />
+        </form>
+        <input id="nextPageButton" type="button" value="Pesquisar" onclick="validate(event)" />
+      </div>
+    </div>
+   
+
+    <script>
+      function validate(event) {
+        const id = document.forms["searchByID"]["number"];
+        if (id.value <= 0) {
+          id.setAttribute("value", 1);
+          alert("O valor mínimo é 1!");
+        } else {
+          teste(event);
+        }
+      }
+
+      function teste(event) {
+        const sprite = document.querySelector("img#sprite");
+        const name = document.querySelector("span#name");
+        const number = document.querySelector("span#number");
+        const id = document.forms["searchByID"]["number"].value;
+        const server = `http://localhost:8800/pokemons/${id}`;
+        const types = document.querySelector("div#types");
+
+        fetch(server)
+          .then((response) => {
+            if (!response.ok) {
+              return response.json().then((error) => {
+                throw new Error(JSON.stringify(error));
+              });
+            }
+            return response.json();
+          })
+          .then((data) => {
+            if (data == null) {
+              throw new Error("Este Pokémon não existe no banco de dados");
+            }
+            sprite.src = data.sprite;
+            name.textContent = data.name[0].toUpperCase() + data.name.slice(1);
+            number.textContent = `#${data.number}`;
+
+            types.innerHTML = "";
+
+            for (var type of data.type) {
+              const img = document.createElement("img");
+              img.src = `./types/${type}.png`;
+              types.appendChild(img);
+            }
+          })
+          .catch((error) => {
+            console.error("Erro na requisição:", error.message);
+            alert(`Erro na requisição: ${error.message}`);
+          });
+      }
+    </script>
+  </body>
+</html>

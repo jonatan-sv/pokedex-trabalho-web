@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link
+      rel="icon"
+      type="image/x-icon"
+      href="https://upload.wikimedia.org/wikipedia/commons/5/53/Pok%C3%A9_Ball_icon.svg"
+    />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Adicionar Pokémon</title>
+    <link rel="stylesheet" href="style.css">
+  </head>
+  <body>
+    <p
+      align="center"
+      style="filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.655))"
+    >
+      <img
+        src="https://upload.wikimedia.org/wikipedia/commons/9/98/International_Pok%C3%A9mon_logo.svg"
+        height="150px"
+      />
+    </p>
+
+    <div id="floatBtns">
+      <a href="./GET_id_test.html">
+        <button id="nextPageButton">← Voltar</button>
+      </a>
+      <a href="./PUT_test.html">
+        <button id="nextPageButton">Avançar →</button>
+      </a>
+    </div>
+    <div id="wra">
+      <div id="poke">
+        <section id="container">
+          <div>
+            <img
+              id="sprite"
+              src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/0.png"
+            />
+            <span id="name" style="font-weight: bold">???</span>
+            <span id="number">#0</span>
+            <div id="types"></div>
+          </div>
+        </section>
+        <br />
+        <br />
+        <form name="searchByID" method="post">
+          Nome:
+          <input
+            type="text"
+            name="name"
+            id="name"
+            placeholder="Digite o nome aqui"
+          />
+          <br />
+          Número:
+          <input
+            type="number"
+            name="number"
+            id="number"
+            min="1"
+            max="100000"
+            placeholder="1"
+          />
+          <br />
+          Tipo 1:
+          <select id="type1" name="type1">
+            <option value="none">Selecione o tipo</option>
+            <option value="normal">Normal</option>
+            <option value="fighting">Fighting</option>
+            <option value="flying">Flying</option>
+            <option value="poison">Poison</option>
+            <option value="ground">Ground</option>
+            <option value="rock">Rock</option>
+            <option value="bug">Bug</option>
+            <option value="ghost">Ghost</option>
+            <option value="steel">Steel</option>
+            <option value="fire">Fire</option>
+            <option value="water">Water</option>
+            <option value="grass">Grass</option>
+            <option value="electric">Electric</option>
+            <option value="psychic">Psychic</option>
+            <option value="ice">Ice</option>
+            <option value="dragon">Dragon</option>
+            <option value="dark">Dark</option>
+            <option value="fairy">Fairy</option>
+            <option value="stellar">Stellar</option>
+            <option value="unknown">Unknown</option>
+            <option value="shadow">Shadow</option>
+          </select>
+          <br />
+          Tipo 2:
+          <select id="type2" name="type2">
+            <option value="none">Selecione o tipo</option>
+            <option value="normal">Normal</option>
+            <option value="fighting">Fighting</option>
+            <option value="flying">Flying</option>
+            <option value="poison">Poison</option>
+            <option value="ground">Ground</option>
+            <option value="rock">Rock</option>
+            <option value="bug">Bug</option>
+            <option value="ghost">Ghost</option>
+            <option value="steel">Steel</option>
+            <option value="fire">Fire</option>
+            <option value="water">Water</option>
+            <option value="grass">Grass</option>
+            <option value="electric">Electric</option>
+            <option value="psychic">Psychic</option>
+            <option value="ice">Ice</option>
+            <option value="dragon">Dragon</option>
+            <option value="dark">Dark</option>
+            <option value="fairy">Fairy</option>
+            <option value="stellar">Stellar</option>
+            <option value="unknown">Unknown</option>
+            <option value="shadow">Shadow</option>
+          </select>
+          <br />
+          Sprite:
+          <input
+            type="text"
+            name="sprite"
+            id="sprite"
+            placeholder="Cole o link aqui"
+          />
+          <br />
+        </form>
+        <input
+          type="button"
+          value="Adicionar"
+          onclick="validate(event)"
+          id="nextPageButton"
+        />
+      </div>
+    </div>
+
+    <script>
+      function validate(event) {
+        const id = document.forms["searchByID"]["number"];
+        if (id.value <= 0) {
+          id.setAttribute("value", 1);
+          alert("O valor mínimo é 1!");
+        } else {
+          teste(event);
+        }
+      }
+
+      function teste(event) {
+        const sprite = document.querySelector("img#sprite");
+        const name = document.querySelector("span#name");
+        const number = document.querySelector("span#number");
+        const types = document.querySelector("div#types");
+
+        const p_name = document.forms["searchByID"]["name"].value;
+        const p_id = document.forms["searchByID"]["number"].value;
+        const p_type1 = document.forms["searchByID"]["type1"].value;
+        const p_type2 = document.forms["searchByID"]["type2"].value;
+        const p_sprite = document.forms["searchByID"]["sprite"].value;
+
+        const server = `http://localhost:8800/pokemons`;
+
+        const body = {
+          name: p_name,
+          number: p_id,
+          type: [p_type1, p_type2].filter((type) => type !== "none"),
+          sprite: p_sprite,
+        };
+
+        fetch(server, {
+          method: "POST",
+          body: JSON.stringify(body),
+          headers: {
+            "Content-type": "application/json; charset=UTF-8",
+          },
+        })
+          .then((response) => {
+            if (!response.ok) {
+              return response.json().then((error) => {
+                throw new Error(JSON.stringify(error));
+              });
+            }
+            return response.json();
+          })
+          .then((data) => {
+            if (data == null) {
+              throw new Error("Este Pokémon não existe no banco de dados");
+            }
+            sprite.src = data.sprite;
+            name.textContent = data.name;
+            number.textContent = `#${data.number}`;
+
+            types.innerHTML = ""; // Limpa para não acumular imagens
+
+            for (var type of data.type) {
+              const img = document.createElement("img");
+              img.src = `./types/${type}.png`;
+              types.appendChild(img);
+            }
+          })
+          .catch((error) => {
+            console.error("Erro na requisição:", error.message);
+            alert(`Erro na requisição: ${error.message}`);
+          });
+      }
+    </script>
+  </body>
+</html>

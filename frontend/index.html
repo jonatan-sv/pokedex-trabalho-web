@@ -12,8 +12,20 @@
   </head>
   <body>
     <style>
+      @font-face {
+        font-family: "Flexo";
+        src: local("Flexo Demi"), local("Flexo-Demi"),
+          url("Flexo-Demi.ttf") format("truetype");
+        font-weight: normal;
+        font-style: normal;
+      }
+
+      * {
+        font-family: "Flexo";
+      }
+
       html {
-        background-image: url("./background.jpg");
+        background-image: url("./img/start_bg.jpg");
         background-repeat: no-repeat;
         background-size: cover;
       }
@@ -70,11 +82,8 @@
     </p>
     <div id="wrap">
       <div id="links">
-        <a href="./all_test">
-          <button id="nextPageButton">Ver todos os Pokémons</button>
-        </a>
-        <a href="./id_test">
-          <button id="nextPageButton">Procurar Pokémon por ID</button>
+        <a href="./GET_all_test.html">
+          <button id="nextPageButton">Começar testes</button>
         </a>
       </div>
     </div>
