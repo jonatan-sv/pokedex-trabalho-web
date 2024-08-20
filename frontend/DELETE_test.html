@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/x-icon" href="https://upload.wikimedia.org/wikipedia/commons/5/53/Pok%C3%A9_Ball_icon.svg"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Deletar por ID</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <p align="center" style="filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.655));">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/9/98/International_Pok%C3%A9mon_logo.svg" height="150px"/>
+    </p>
+
+    <div id="floatBtns">
+        <a href="./PUT_test.html">
+            <button id="nextPageButton">← Voltar</button>
+        </a>
+    </div>
+
+    <div id="wra">
+        <div id="poke">
+            <section id="container">
+                <div id="input-section">
+                    <label for="pokemonId">ID do Pokémon:</label>
+                    <input type="number" id="pokemonId" min="1">
+                    <button onclick="confirmDelete()">Deletar Pokémon</button>
+                    <br>
+                    <div id="confirmation" style="display: none;">
+                        <h3>Você tem certeza que quer deletar este Pokémon?</h3>
+                        <div id="pokemonDetails"></div>
+                        <button onclick="deleteConfirmed()">Sim</button>
+                        <button onclick="cancelDelete()">Não</button>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <script>
+        let currentPokemonId;
+
+        function confirmDelete() {
+            const pokemonId = document.getElementById('pokemonId').value;
+            if (!pokemonId) {
+                return alert('Por favor, insira um ID de Pokémon.');
+            }
+
+            fetch(`http://localhost:8800/pokemons/${pokemonId}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Pokémon não encontrado');
+                    }
+                    return response.json();
+                })
+                .then(pokemon => {
+                    currentPokemonId = pokemon.number || pokemonId;
+
+                    const pokemonDetails = document.getElementById('pokemonDetails');
+                    pokemonDetails.innerHTML = `
+                        <img src="${pokemon.sprite}" alt="${pokemon.name}">
+                        <p>${pokemon.name}</p>
+                    `;
+
+                    document.getElementById('confirmation').style.display = 'block';
+                })
+                .catch(error => {
+                    alert(error.message);
+                });
+        }
+
+        function deleteConfirmed() {
+            fetch(`http://localhost:8800/pokemons/${currentPokemonId}`, {
+                method: 'DELETE'
+            })
+            .then(response => {
+                if (response.ok) {
+                    alert('Pokémon deletado com sucesso');
+                } else {
+                    throw new Error('Falha ao deletar o Pokémon');
+                }
+            })
+            .catch(error => {
+                alert(error.message);
+            })
+            .finally(() => {
+                cancelDelete();
+            });
+        }
+
+        function cancelDelete() {
+            document.getElementById('confirmation').style.display = 'none';
+            document.getElementById('pokemonId').value = '';
+        }
+    </script>
+</body>
+</html>
