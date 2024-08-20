@@ -31,8 +31,8 @@ const PokemonSchema = new Schema({
     },
     required: [true, "O tipo do Pokémon é obrigatório!"],
     validate: {
-      validator: (v) => v.length > 0,
-      message: "O Pokémon deve ter pelo menos um tipo!",
+      validator: (v) => v.length > 0 && v.length <= 2,
+      message: "O Pokémon deve ter no mínimo 1 e no máximo 2 tipos!",
     },
   },
   sprite: {
