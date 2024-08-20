@@ -1,10 +1,11 @@
 import Pokemon from "../models/pokemon.js";
 import errorHandler from "../utils/errorhandler.js";
+import logger from "../logger.js";
 
 export const getPokemons = (_, res) => {
   Pokemon.find({})
-    .then((pokemons) => {
-      return res.status(200).json({ results: pokemons });
+    .then((result) => {
+      return res.status(200).json({ results: result });
     })
     .catch((error) => {
       errorHandler(error, req, res, "obter");
@@ -13,11 +14,11 @@ export const getPokemons = (_, res) => {
 
 export const getPokemonByID = (req, res) => {
   Pokemon.findOne({ number: req.params.id })
-    .then((data) => {
-      if (!data) {
+    .then((result) => {
+      if (!result) {
         return res.status(404).json({ message: "Pokémon não encontrado!" });
       }
-      return res.status(200).json(data);
+      return res.status(200).json(result);
     })
     .catch((error) => {
       errorHandler(error, req, res, "procurar");
@@ -32,7 +33,10 @@ export const postPokemon = (req, res) => {
 
   novoPokemon
     .save()
-    .then((poke) => res.status(201).json(poke))
+    .then((result) => {
+      logger.warn("[DB] Um Pokémon foi adicionado: ", result);
+      res.status(201).json(result);
+    })
     .catch((error) => {
       errorHandler(error, req, res, "adicionar");
     });
@@ -44,14 +48,15 @@ export const updatePokemonByID = (req, res) => {
     ...req.body,
   };
   Pokemon.findOneAndUpdate({ number: Number(req.params.id) }, updates, {
-    new: true,           // Retorna o pokémon atualizado ao invés do antigo
-    upsert: true,        // Cria o pokémon se ele não for encontrado
+    new: true,    // Retorna o pokémon atualizado ao invés do antigo
+    upsert: true, // Cria o pokémon se ele não for encontrado
   })
-    .then((updatedPokemon) => {
-      if (!updatedPokemon) {
+    .then((result) => {
+      if (!result) {
         return res.status(404).json({ message: "Pokémon não encontrado!" });
       }
-      return res.status(200).json(updatedPokemon);
+      logger.warn("[DB] Um Pokémon foi atualizado ou adicionado: ", result);
+      return res.status(200).json(result);
     })
     .catch((error) => {
       errorHandler(error, req, res, "atualizar");
@@ -61,12 +66,11 @@ export const updatePokemonByID = (req, res) => {
 export const deletePokemonByID = (req, res) => {
   Pokemon.findOneAndDelete({ number: req.params.id })
     .then((result) => {
-      if (result) {
-        return res
-          .status(200)
-          .json( result );
+      if (!result) {
+        return res.status(404).json({ message: "Pokémon não encontrado!" });
       }
-      return res.status(404).json({ message: "Pokémon não encontrado!" });
+      logger.warn("[DB] Um Pokémon foi removido: ", result);
+      return res.status(200).json(result);
     })
     .catch((error) => {
       errorHandler(error, req, res, "apagar");
