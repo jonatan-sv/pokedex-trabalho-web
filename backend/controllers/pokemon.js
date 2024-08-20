@@ -59,12 +59,12 @@ export const updatePokemonByID = (req, res) => {
 };
 
 export const deletePokemonByID = (req, res) => {
-  Pokemon.deleteOne({ number: req.params.id })
+  Pokemon.findOneAndDelete({ number: req.params.id })
     .then((result) => {
-      if (result.deletedCount > 0) {
+      if (result) {
         return res
-          .status(204)
-          .json({ message: "Pokémon apagado com sucesso!" });
+          .status(200)
+          .json( result );
       }
       return res.status(404).json({ message: "Pokémon não encontrado!" });
     })
