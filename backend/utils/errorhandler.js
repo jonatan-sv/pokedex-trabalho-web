@@ -1,6 +1,6 @@
 import logger from "../logger.js";
 
-const handleMongooseError = (error, res, action) => {
+const handleMongooseError = (error, req, res, action) => {
   // Violação de unicidade
   if (error.code === 11000) {
     const errors = Object.keys(error.keyValue).reduce((acc, key) => {
@@ -24,7 +24,19 @@ const handleMongooseError = (error, res, action) => {
     });
   // Outros
   } else {
-    logger.error(`[DB] Erro ao ${action} Pokémon: `, error);
+    const errorLog = {
+      ip: req.ip,
+      method: req.method,
+      url: req.originalUrl,
+      headers: req.headers,
+      body: req.body,
+      params: { ...req.params },
+      queries: { ...req.query },
+      errorMessage: error.message,
+      stack: error.stack,
+    };
+
+    logger.error(`[DB] Erro ao ${action} Pokémon: `, errorLog);
     return res
       .status(500)
       .json({ message: `Erro interno ao ${action} o Pokémon.` });

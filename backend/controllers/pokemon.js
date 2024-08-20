@@ -7,7 +7,7 @@ export const getPokemons = (_, res) => {
       return res.status(200).json({ results: pokemons });
     })
     .catch((error) => {
-      errorHandler(error, res, "obter")
+      errorHandler(error, req, res, "obter");
     });
 };
 
@@ -20,7 +20,7 @@ export const getPokemonByID = (req, res) => {
       return res.status(200).json(data);
     })
     .catch((error) => {
-      errorHandler(error, res, "procurar")
+      errorHandler(error, req, res, "procurar");
     });
 };
 
@@ -34,7 +34,7 @@ export const postPokemon = (req, res) => {
     .save()
     .then((poke) => res.status(201).json(poke))
     .catch((error) => {
-      errorHandler(error, res, "adicionar");
+      errorHandler(error, req, res, "adicionar");
     });
 };
 
@@ -46,7 +46,6 @@ export const updatePokemonByID = (req, res) => {
   Pokemon.findOneAndUpdate({ number: Number(req.params.id) }, updates, {
     new: true,           // Retorna o pokémon atualizado ao invés do antigo
     upsert: true,        // Cria o pokémon se ele não for encontrado
-    runValidators: true, // Aplica as validações do modelo no update
   })
     .then((updatedPokemon) => {
       if (!updatedPokemon) {
@@ -55,7 +54,7 @@ export const updatePokemonByID = (req, res) => {
       return res.status(200).json(updatedPokemon);
     })
     .catch((error) => {
-      errorHandler(error, res, "atualizar");
+      errorHandler(error, req, res, "atualizar");
     });
 };
 
@@ -70,6 +69,6 @@ export const deletePokemonByID = (req, res) => {
       return res.status(404).json({ message: "Pokémon não encontrado!" });
     })
     .catch((error) => {
-      errorHandler(error, res, "apagar")
+      errorHandler(error, req, res, "apagar");
     });
 };
