@@ -30,6 +30,7 @@
 
     <div id="wra">
       <div id="poke">
+        <h2 style="margin-bottom: 0; margin-top: -25px;">Teste de GET</h2>
         <section id="container">
           <div>
             <img
@@ -37,7 +38,7 @@
               src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/0.png"
             />
             <span id="name" style="font-weight: bold">???</span>
-            <span id="number">#0</span>
+            <span id="number">Nº 0</span>
             <div id="types"></div>
           </div>
         </section>
@@ -93,7 +94,7 @@
             }
             sprite.src = data.sprite;
             name.textContent = data.name[0].toUpperCase() + data.name.slice(1);
-            number.textContent = `#${data.number}`;
+            number.textContent = `Nº ${data.number}`;
 
             types.innerHTML = "";
 
