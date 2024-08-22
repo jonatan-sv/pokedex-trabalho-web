@@ -2,7 +2,7 @@ import Pokemon from "../models/pokemon.js";
 import errorHandler from "../utils/errorhandler.js";
 import logger from "../logger.js";
 
-export const getPokemons = (_, res) => {
+export const getPokemons = (req, res) => {
   Pokemon.find({})
     .then((result) => {
       return res.status(200).json({ results: result });
