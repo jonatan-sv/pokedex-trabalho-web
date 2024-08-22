@@ -92,8 +92,17 @@
 - **Descrição:** Remove um Pokémon pelo ID.
 - **Parâmetros de URL:**
   - `id` (string): ID do Pokémon a ser removido.
-- **Resposta Sucesso:** `204 No Content`
+- **Resposta Sucesso:** `200 OK`
 - **Resposta Erro:** `404 Not Found` se o Pokémon não for encontrado.
+
+  ```json
+  {
+    "name": "deleted pokémon",
+    "number": 1,
+    "type": ["grass", "poison"],
+    "sprite": "..."
+  }
+  ```
 
 > ⚠️ *ATENÇÃO*
 >
