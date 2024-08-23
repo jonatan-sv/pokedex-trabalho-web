@@ -131,7 +131,6 @@ backend/
   ├── routes/
   ├── utils/
   ├── db.js
-  ├── dump.js
   ├── index.js
   └── logger.js
 ```
@@ -142,7 +141,6 @@ backend/
 - `routes`: Rotas que recebem as requisições
 - `utils`: Códigos úteis
 - `db.js`: Configurações do banco de dados
-- `dump.js`: Script para popular o banco de dados com os Pokémons
 - `index.js`: Configurações da API
 - `logger.js`: Configurações de logs internos
 
