@@ -1,3 +1,9 @@
+/**
+ * Esse é um script que deve ser rodado separadamente para popular o
+ * banco de dados com os Pokémons vindos da PokéApi.
+ * No VSCode, ele pode ser rodado utilizado CodeRunner.
+ */
+
 import Pokedex from "pokedex-promise-v2";
 import mongoose from "mongoose";
 import { model } from "mongoose";
@@ -7,13 +13,12 @@ const url = "mongodb://localhost:27017/Pokedex";
 const connectDB = async () => {
   try {
     await mongoose.connect(url);
-    console.log('Conectado ao MongoDB com sucesso!');
+    console.log("Conectado ao MongoDB com sucesso!");
   } catch (error) {
-    console.error('Erro ao conectar ao MongoDB:', error);
+    console.error("Erro ao conectar ao MongoDB:", error);
     process.exit(1); // Encerra a aplicação em caso de falha na conexão
   }
 };
-
 
 const { Schema } = mongoose;
 
@@ -51,7 +56,6 @@ const PokemonSchema = new Schema({
   },
 });
 
-
 const Pokemon = model("pokemons", PokemonSchema);
 const P = new Pokedex();
 
@@ -71,18 +75,37 @@ async function addEntry(name, number, type, sprite) {
   }
 }
 
-async function dumpPokemons() {
+async function checkLastPokemon() {
+  const maxNumber = await Pokemon.aggregate([
+    {
+      $group: {
+        _id: null,
+        maxNumber: { $max: "$number" },
+      },
+    },
+  ]);
+  return maxNumber.length > 0 ? maxNumber[0].maxNumber : 0;
+}
+
+async function dumpPokemons(delay) {
   try {
     const resp = await P.getPokemonsList();
     const results = resp.results;
-    
-    for (let pokemon of results) {
+    const last = await checkLastPokemon();
+
+    for (let i = last; i < results.length; i++) {
       try {
-        const p = await P.getPokemonByName(pokemon.name);
+        // Adiciona um delay de 1 segundo
+        if (delay) await new Promise((resolve) => setTimeout(resolve, 1000));
+
+        const p = await P.getPokemonByName(results[i].name);
         const type = p.types.map((i) => i.type.name);
         await addEntry(p.name, p.id, type, p.sprites.front_default);
       } catch (error) {
-        console.error(`Erro ao obter dados do Pokémon ${pokemon.name}:`, error);
+        console.error(
+          `Erro ao obter dados do Pokémon ${results[i].name}:`,
+          error
+        );
       }
     }
 
@@ -93,4 +116,7 @@ async function dumpPokemons() {
 }
 
 connectDB();
-dumpPokemons();
+// Mude para false caso não queira delay entre as requests
+// O motivo do delay é para evitar abusos da API.
+// Apesar dela não ter limite explícito, é bom se prevenir...
+dumpPokemons(true);
